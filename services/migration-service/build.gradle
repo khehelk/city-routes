@@ -1,0 +1,13 @@
+group = 'ru.khehelk.services.migrationservice'
+version = '0.0.1-SNAPSHOT'
+
+springBoot {
+    mainClass = 'ru.khehelk.services.migrationservice.MigrationServiceApplication'
+    buildInfo()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.liquibase:liquibase-core'
+    runtimeOnly 'org.postgresql:postgresql'
+}

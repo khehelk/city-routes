@@ -1,0 +1,18 @@
+group = 'ru.khehelk.services.authservice'
+version = '0.0.1-SNAPSHOT'
+
+springBoot {
+    mainClass = 'ru.khehelk.services.authservice.AuthServiceApplication'
+    buildInfo()
+}
+
+dependencies {
+    implementation 'net.logstash.logback:logstash-logback-encoder:7.3'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.mapstruct:mapstruct:${mapstruct_version}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdoc_version}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: migration-service
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${JDBC_URL}
+    username: ${JDBC_USERNAME}
+    password: ${JDBC_PASSWORD}
+  liquibase:
+    change-log: db/changelog/master.yml
