@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+        "-//Checkstyle//DTD SuppressionXpathFilter Experimental Configuration 1.2//EN"
+        "https://checkstyle.org/dtds/suppressions_1_2_xpath_experimental.dtd">
+
+<suppressions>
+    <!--    Не нужен конструктор на @SpringBootApplication классе -->
+    <suppress-xpath checks="HideUtilityClassConstructor"
+                    query="//CLASS_DEF[//MODIFIERS/ANNOTATION[./IDENT[@text='SpringBootApplication']]]"/>
+
+    <!--    Можно не создавать конструктор для класса, у которого все методы статические, а также он помечен аннотацией @NoArgsConstructor(access = AccessLevel.PRIVATE). -->
+    <!--    Смотрит на аннотацию @NoArgsConstructor и проверяет, что у нее есть параметр access, который равен AccessLevel.PRIVATE -->
+    <!--    В будущем надо будет допилить проверку на то, что нет других аннотаций, которые генерируют
+    конструкторы (@AllArgsConstructor, @RequiredArgsConstructor). Пока что это невозможно, в силу того, что XPath в Checkstyle не поддерживает not-->
+    <suppress-xpath checks="HideUtilityClassConstructor" query="//CLASS_DEF[.//ANNOTATION[./IDENT[@text='NoArgsConstructor']
+    and
+    ./ANNOTATION_MEMBER_VALUE_PAIR[./IDENT[@text='access']][./IDENT[@text='access']]
+    and
+    ./ANNOTATION_MEMBER_VALUE_PAIR[./IDENT[@text='access']]/EXPR[./DOT/IDENT[1][@text='AccessLevel']]
+    and
+    ./ANNOTATION_MEMBER_VALUE_PAIR[./IDENT[@text='access']]/EXPR[./DOT/IDENT[2][@text='PRIVATE']]
+    ]]"/>
+</suppressions>
