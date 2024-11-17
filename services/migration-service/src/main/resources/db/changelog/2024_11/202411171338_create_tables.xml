@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+    <changeSet id="202411171338_create_tables_1" author="danil.markov">
+        <preConditions>
+            <not>
+                <tableExists tableName="userdata" />
+            </not>
+            <not>
+                <tableExists tableName="city" />
+            </not>
+            <not>
+                <tableExists tableName="stop" />
+            </not>
+            <not>
+                <tableExists tableName="route" />
+            </not>
+            <not>
+                <tableExists tableName="route_stops" />
+            </not>
+            <not>
+                <tableExists tableName="favourite" />
+            </not>
+            <not>
+                <tableExists tableName="review" />
+            </not>
+        </preConditions>
+        <createTable tableName="userdata">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="email" type="varchar">
+                <constraints nullable="false" />
+            </column>
+            <column name="password" type="varchar">
+                <constraints nullable="false" />
+            </column>
+            <column name="role" type="varchar" >
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <createTable tableName="city">
+            <column name="code" type="int" autoIncrement="false">
+                <constraints primaryKey="true" />
+            </column>
+        </createTable>
+        <createTable tableName="stop">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="city_code" type="int">
+                <constraints nullable="false" foreignKeyName="stop_city_fk" referencedTableName="city" referencedColumnNames="code" />
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <createTable tableName="route">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="city_code" type="int">
+                <constraints nullable="false" foreignKeyName="route_city_fk" referencedTableName="city" referencedColumnNames="code" />
+            </column>
+            <column name="number" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="frequency_range_start" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="frequency_range_end" type="int">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <createTable tableName="favourite">
+            <column name="userdata_id" type="bigint">
+                <constraints primaryKey="true" foreignKeyName="favourite_userdata_fk" referencedTableName="userdata" referencedColumnNames="id" />
+            </column>
+            <column name="route_id" type="bigint">
+                <constraints primaryKey="true" foreignKeyName="favourite_route_fk" referencedTableName="route" referencedColumnNames="id" />
+            </column>
+        </createTable>
+        <createTable tableName="review">
+            <column name="userdata_id" type="bigint">
+                <constraints primaryKey="true" foreignKeyName="review_userdata_fk" referencedTableName="userdata" referencedColumnNames="id" />
+            </column>
+            <column name="route_id" type="bigint">
+                <constraints primaryKey="true" foreignKeyName="review_route_fk" referencedTableName="route" referencedColumnNames="id" />
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

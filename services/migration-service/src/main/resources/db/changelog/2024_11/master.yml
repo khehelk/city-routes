@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: 202411171338_create_tables.xml
+      relativeToChangelogFile: true
+
