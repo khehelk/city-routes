@@ -1,4 +1,4 @@
-package ru.khehelk.migrationservice;
+package ru.khehelk.migrationservice.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
