@@ -4,10 +4,10 @@ plugins {
 	id 'checkstyle'
 }
 
-group = 'ru.khehelk.city-routes'
-version = '0.0.1-SNAPSHOT'
-
 subprojects {
+	group = 'ru.khehelk.city-routes'
+	version = '0.0.1-SNAPSHOT'
+
 	def libraries = ['common']
 
 	apply plugin: 'checkstyle'

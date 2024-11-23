@@ -1,6 +1,3 @@
-group = 'ru.khehelk.services.adminservice'
-version = '0.0.1-SNAPSHOT'
-
 springBoot {
     mainClass = 'ru.khehelk.services.adminservice.AdminServiceApplication'
     buildInfo()

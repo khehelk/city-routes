@@ -2,4 +2,10 @@ databaseChangeLog:
   - include:
       file: 202411171338_create_tables.xml
       relativeToChangelogFile: true
+  - include:
+      file: 202411171803_add_column_in_city.xml
+      relativeToChangelogFile: true
+  - include:
+      file: 202411182019_add_route_stops_table.xml
+      relativeToChangelogFile: true
 

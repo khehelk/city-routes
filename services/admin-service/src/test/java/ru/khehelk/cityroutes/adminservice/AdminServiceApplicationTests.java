@@ -1,4 +1,4 @@
-package ru.khehelk.adminservice;
+package ru.khehelk.cityroutes.adminservice;
 
 import org.junit.jupiter.api.Test;
 
