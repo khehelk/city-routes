@@ -1,18 +1,19 @@
 package ru.khehelk.cityroutes.adminservice.service.mapper;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.khehelk.cityroutes.adminservice.domain.Route;
-import ru.khehelk.cityroutes.adminservice.domain.RouteStops;
+import ru.khehelk.cityroutes.domain.mapper.RouteSimpleMapper;
+import ru.khehelk.cityroutes.domain.mapper.StopSimpleMapper;
+import ru.khehelk.cityroutes.domain.model.Route;
+import ru.khehelk.cityroutes.domain.model.RouteStops;
 import ru.khehelk.cityroutes.adminservice.service.CityService;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteCreateDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteInfoDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopDto;
+import ru.khehelk.cityroutes.domain.dto.RouteCreateDto;
+import ru.khehelk.cityroutes.domain.dto.RouteDto;
+import ru.khehelk.cityroutes.domain.dto.RouteInfoDto;
+import ru.khehelk.cityroutes.domain.dto.StopDto;
 
 @Service
 @RequiredArgsConstructor
@@ -20,29 +21,25 @@ public class RouteMapper {
 
     private final CityService cityService;
 
-    private final StopMapper stopMapper;
+    private final RouteSimpleMapper routeSimpleMapper;
+
+    private final StopSimpleMapper stopSimpleMapper;
 
     public Route toEntity(RouteCreateDto route) {
         Route routeEntity = new Route();
-        routeEntity.setCity(cityService.findByCode(route.cityCode()));
+        routeEntity.setCity(cityService.findById(route.cityId()));
         routeEntity.setNumber(route.number());
         routeEntity.setFrequencyRangeStart(route.frequencyRangeStart());
         routeEntity.setFrequencyRangeEnd(route.frequencyRangeEnd());
         return routeEntity;
     }
 
-    public RouteDto toDto(Route route) {
-        return new RouteDto(
+    public RouteInfoDto toInfoDto(Route route) {
+        return new RouteInfoDto(
             route.getId(),
             route.getNumber(),
             route.getFrequencyRangeStart(),
-            route.getFrequencyRangeEnd()
-        );
-    }
-
-    public RouteInfoDto toInfoDto(Route route) {
-        return new RouteInfoDto(
-            toDto(route),
+            route.getFrequencyRangeEnd(),
             createStopsMap(route)
         );
     }
@@ -52,7 +49,7 @@ public class RouteMapper {
         for (RouteStops routeStop : route.getStops()) {
             stopsMap.put(
                 routeStop.getStopOrder(),
-                stopMapper.toDto(routeStop.getStop()));
+                stopSimpleMapper.toDto(routeStop.getStop()));
         }
         return stopsMap;
     }

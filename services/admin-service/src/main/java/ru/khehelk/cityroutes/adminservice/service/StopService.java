@@ -1,7 +1,6 @@
 package ru.khehelk.cityroutes.adminservice.service;
 
 import java.util.List;
-import java.util.Map;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -10,12 +9,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.khehelk.cityroutes.adminservice.domain.City;
-import ru.khehelk.cityroutes.adminservice.domain.Stop;
-import ru.khehelk.cityroutes.adminservice.repository.StopRepository;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopCreateDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopUpdateDto;
+import ru.khehelk.cityroutes.domain.mapper.StopSimpleMapper;
+import ru.khehelk.cityroutes.domain.model.Stop;
+import ru.khehelk.cityroutes.businesslogic.repository.StopRepository;
+import ru.khehelk.cityroutes.domain.dto.StopCreateDto;
+import ru.khehelk.cityroutes.domain.dto.StopDto;
+import ru.khehelk.cityroutes.domain.dto.StopUpdateDto;
 import ru.khehelk.cityroutes.adminservice.service.mapper.StopMapper;
 
 @Service
@@ -26,8 +25,13 @@ public class StopService {
 
     private final StopMapper stopMapper;
 
+    private final StopSimpleMapper stopSimpleMapper;
+
     @Transactional
     public void createAndSaveStop(StopCreateDto stop) {
+        if (stopRepository.existsByCity_IdAndName(stop.cityId(), stop.name())) {
+            throw new IllegalArgumentException("Такая остановка же существует");
+        }
         stopRepository.save(stopMapper.toEntity(stop));
     }
 
@@ -45,21 +49,16 @@ public class StopService {
     }
 
     @Transactional(readOnly = true)
-    public Page<StopDto> findAllBy(Integer cityCode,
-                                   String stopName,
-                                   Pageable pageable) {
-        Page<Stop> stopPage = stopRepository.findAllByCity_codeAndNameContaining(cityCode, stopName.toUpperCase(), pageable);
-        return new PageImpl<>(
-            stopPage.getContent().stream().map(stopMapper::toDto).toList(),
-            stopPage.getPageable(),
-            stopPage.getTotalElements());
+    public List<StopDto> findAllBy(Long cityId) {
+        List<Stop> stops = stopRepository.findAllByCity_id(cityId);
+        return stops.stream().map(stopSimpleMapper::toDto).toList();
     }
 
     @Transactional(readOnly = true)
     public Page<StopDto> findAllBy(Pageable pageable) {
         Page<Stop> stopPage = stopRepository.findAll(pageable);
         return new PageImpl<>(
-            stopPage.getContent().stream().map(stopMapper::toDto).toList(),
+            stopPage.getContent().stream().map(stopSimpleMapper::toDto).toList(),
             stopPage.getPageable(),
             stopPage.getTotalElements());
     }
@@ -71,6 +70,11 @@ public class StopService {
 
     @Transactional(readOnly = true)
     public Stop findById(Long value) {
-        return stopRepository.findById(value).orElseThrow(EntityNotFoundException::new);
+        return stopRepository.findById(value)
+            .orElseThrow(() -> new EntityNotFoundException("Остановка с таким id не найдена"));
+    }
+
+    public List<Stop> findAll() {
+        return stopRepository.findAll();
     }
 }

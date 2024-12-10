@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    font-family: 'Roboto Regular', sans-serif;
+    width: 100dvw;
+    overflow-x: hidden;
+}
+
+.routes-list {
+    max-height: 500px;
+}
+
+.admin-panel {
+    max-height: 610px;
+}
+
+@layer base {
+    @font-face {
+        font-family: 'roboto';
+        src: url('/fonts/Roboto-Regular.ttf');
+    }
+}

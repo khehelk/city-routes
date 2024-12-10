@@ -8,10 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.khehelk.cityroutes.adminservice.service.StopService;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopUpdateDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.CityDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopCreateDto;
+import ru.khehelk.cityroutes.domain.dto.StopCreateDto;
+import ru.khehelk.cityroutes.domain.dto.StopDto;
+import ru.khehelk.cityroutes.domain.dto.StopUpdateDto;
 import ru.khehelk.cityroutes.adminservice.web.api.StopApi;
 
 @RestController
@@ -23,7 +22,8 @@ public class StopController implements StopApi {
     @Override
     public ResponseEntity<String> createAndSaveStop(StopCreateDto stop) {
         stopService.createAndSaveStop(stop);
-        return ResponseEntity.created(URI.create("/api/v1/stops")).build();
+        return ResponseEntity.created(URI.create("/api/v1/stops"))
+            .body("Остановка успешно сохранена");
     }
 
     @Override
@@ -40,13 +40,12 @@ public class StopController implements StopApi {
     }
 
     @Override
-    public ResponseEntity<Page<StopDto>> searchStopsPage(Integer cityCode,
-                                                         String stopName,
-                                                         Pageable pageable) {
-        if (cityCode != null && stopName != null && !stopName.isEmpty()) {
-            return ResponseEntity.ok(stopService.findAllBy(cityCode, stopName, pageable));
+    public ResponseEntity<?> searchStopsPage(Long cityId) {
+        if (cityId == null) {
+            return ResponseEntity.badRequest()
+                .body("Город не указан");
         }
-        return ResponseEntity.ok(stopService.findAllBy(pageable));
+        return ResponseEntity.ok(stopService.findAllBy(cityId));
     }
 
 }

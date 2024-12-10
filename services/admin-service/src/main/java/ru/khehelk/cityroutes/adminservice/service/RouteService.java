@@ -1,30 +1,32 @@
 package ru.khehelk.cityroutes.adminservice.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.khehelk.cityroutes.adminservice.domain.Route;
-import ru.khehelk.cityroutes.adminservice.domain.RouteStops;
-import ru.khehelk.cityroutes.adminservice.domain.RouteStopsId;
-import ru.khehelk.cityroutes.adminservice.domain.Stop;
-import ru.khehelk.cityroutes.adminservice.repository.RouteRepository;
+import ru.khehelk.cityroutes.domain.mapper.RouteSimpleMapper;
+import ru.khehelk.cityroutes.domain.model.Route;
+import ru.khehelk.cityroutes.domain.model.RouteStops;
+import ru.khehelk.cityroutes.domain.model.RouteStopsId;
+import ru.khehelk.cityroutes.domain.model.Stop;
+import ru.khehelk.cityroutes.businesslogic.repository.RouteRepository;
 import ru.khehelk.cityroutes.adminservice.repository.RouteStopsRepository;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteCreateDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteInfoDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteUpdateDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteUpdateStopsDto;
+import ru.khehelk.cityroutes.domain.dto.RouteCreateDto;
+import ru.khehelk.cityroutes.domain.dto.RouteDto;
+import ru.khehelk.cityroutes.domain.dto.RouteInfoDto;
+import ru.khehelk.cityroutes.domain.dto.RouteUpdateDto;
+import ru.khehelk.cityroutes.domain.dto.RouteUpdateStopsDto;
 import ru.khehelk.cityroutes.adminservice.service.mapper.RouteMapper;
-import ru.khehelk.cityroutes.adminservice.web.api.RouteApi;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class RouteService {
@@ -34,7 +36,10 @@ public class RouteService {
     private final RouteMapper routeMapper;
 
     private final RouteStopsRepository routeStopsRepository;
+
     private final StopService stopService;
+
+    private final RouteSimpleMapper routeSimpleMapper;
 
     @Transactional
     public void createAndSaveRoute(RouteCreateDto route) {
@@ -67,8 +72,12 @@ public class RouteService {
                             RouteUpdateDto route) {
         Route routeEntity = routeRepository.findById(id)
             .orElseThrow(EntityNotFoundException::new);
+        routeStopsRepository.deleteAll(routeEntity.getStops());
         routeEntity.setFrequencyRangeStart(route.frequencyRangeStart());
         routeEntity.setFrequencyRangeEnd(route.frequencyRangeEnd());
+        routeEntity.setStops(route.stops().entrySet().stream()
+            .map(stop -> createRouteStops(stop, routeEntity)).collect(Collectors.toList()));
+        routeStopsRepository.saveAll(routeEntity.getStops());
         routeRepository.save(routeEntity);
     }
 
@@ -98,16 +107,17 @@ public class RouteService {
 
     @Transactional
     public void deleteRoute(Long id) {
+        routeStopsRepository.deleteAllById_routeId(id);
         routeRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
-    public Page<RouteDto> findAllBy(Integer cityCode,
+    public Page<RouteDto> findAllBy(Long cityId,
                                     Integer number,
                                     Pageable pageable) {
-        Page<Route> routePage = routeRepository.findByCity_codeAndNumber(cityCode, number, pageable);
+        Page<Route> routePage = routeRepository.findByCity_idAndNumber(cityId, number, pageable);
         return new PageImpl<>(
-            routePage.getContent().stream().map(routeMapper::toDto).toList(),
+            routePage.getContent().stream().map(routeSimpleMapper::toDto).toList(),
             routePage.getPageable(),
             routePage.getTotalElements());
     }
@@ -116,7 +126,7 @@ public class RouteService {
     public Page<RouteDto> findAllBy(Pageable pageable) {
         Page<Route> routePage = routeRepository.findAll(pageable);
         return new PageImpl<>(
-            routePage.getContent().stream().map(routeMapper::toDto).toList(),
+            routePage.getContent().stream().map(routeSimpleMapper::toDto).toList(),
             routePage.getPageable(),
             routePage.getTotalElements());
     }
@@ -124,7 +134,7 @@ public class RouteService {
     @Transactional(readOnly = true)
     public RouteInfoDto findById(Long id) {
         Route route = routeRepository.findById(id)
-            .orElseThrow(EntityNotFoundException::new);
+            .orElseThrow(() -> new EntityNotFoundException("Маршрут с таким id не найден"));
         return routeMapper.toInfoDto(route);
     }
 

@@ -8,7 +8,7 @@ subprojects {
 	group = 'ru.khehelk.city-routes'
 	version = '0.0.1-SNAPSHOT'
 
-	def libraries = ['common']
+	def libraries = ['domain', 'business-logic', 'web-config']
 
 	apply plugin: 'checkstyle'
 	apply plugin: 'io.spring.dependency-management'
@@ -35,10 +35,10 @@ subprojects {
 
 	checkstyle {
 		toolVersion = '10.5.0'
-		configFile = file("$rootDir/config/checkstyle/checkstyle.xml")
+		configFile = file("$rootDir/_config/checkstyle/checkstyle.xml")
 		configProperties = [
-				'suppressionsFile': file("${rootProject.projectDir}/config/checkstyle/suppressions.xml"),
-				'xpathSuppressionsFile': file("${rootProject.projectDir}/config/checkstyle/xpath-suppressions.xml")
+				'suppressionsFile': file("${rootProject.projectDir}/_config/checkstyle/suppressions.xml"),
+				'xpathSuppressionsFile': file("${rootProject.projectDir}/_config/checkstyle/xpath-suppressions.xml")
 		]
 	}
 

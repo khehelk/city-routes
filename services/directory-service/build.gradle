@@ -1,0 +1,18 @@
+group = 'ru.khehelk.services.directoryservice'
+version = '0.0.1-SNAPSHOT'
+
+springBoot {
+    mainClass = 'ru.khehelk.services.directoryservice.app.DirectoryServiceApplication'
+    buildInfo()
+}
+
+dependencies {
+    implementation project(':common:business-logic')
+    implementation project(':common:web-config')
+    implementation 'net.logstash.logback:logstash-logback-encoder:7.3'
+    implementation "org.mapstruct:mapstruct:${mapstruct_version}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdoc_version}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+    runtimeOnly 'org.postgresql:postgresql'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}

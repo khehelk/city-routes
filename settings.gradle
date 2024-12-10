@@ -2,6 +2,9 @@ rootProject.name = 'city-routes'
 
 include('services:admin-service',
         'services:migration-service',
-        'services:routes-service',
+        'services:directory-service',
         'services:auth-service',
-        'services:review-service',)
+        'services:review-service',
+        'common:domain',
+        'common:business-logic',
+        'common:web-config')

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+    <changeSet id="202412071058_add_constraints" author="danil.markov">
+        <addUniqueConstraint tableName="city" columnNames="region_code, name" />
+        <addUniqueConstraint tableName="route" columnNames="city_id, number" />
+        <addUniqueConstraint tableName="stop" columnNames="city_id, name" />
+    </changeSet>
+</databaseChangeLog>

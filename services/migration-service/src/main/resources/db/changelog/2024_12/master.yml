@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - include:
+      file: 202412071036_change_column_names.xml
+      relativeToChangelogFile: true
+  - include:
+      file: 202412071044_change_constraints.xml
+      relativeToChangelogFile: true
+  - include:
+      file: 202412071058_add_constraints.xml
+      relativeToChangelogFile: true
+  - include:
+      file: 202412071223_change_column_type.xml
+      relativeToChangelogFile: true
+

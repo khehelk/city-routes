@@ -2,4 +2,7 @@ databaseChangeLog:
   - include:
       file: 2024_11/master.yml
       relativeToChangelogFile: true
+  - include:
+      file: 2024_12/master.yml
+      relativeToChangelogFile: true
 

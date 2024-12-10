@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+    <changeSet id="202412071044_change_constraints" author="danil.markov">
+        <dropForeignKeyConstraint baseTableName="route" constraintName="route_city_fk" />
+        <dropForeignKeyConstraint baseTableName="stop" constraintName="stop_city_fk" />
+        <dropPrimaryKey tableName="city" constraintName="city_pkey" />
+        <addColumn tableName="city">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+        </addColumn>
+        <addForeignKeyConstraint baseTableName="route" baseColumnNames="city_id"
+                                 referencedTableName="city" referencedColumnNames="id"
+                                 constraintName="route_city_fk" />
+        <addForeignKeyConstraint baseTableName="stop" baseColumnNames="city_id"
+                                 referencedTableName="city" referencedColumnNames="id"
+                                 constraintName="stop_city_fk" />
+    </changeSet>
+</databaseChangeLog>

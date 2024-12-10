@@ -13,14 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteCreateDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteInfoDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteUpdateDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.RouteUpdateStopsDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopCreateDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopUpdateDto;
+import ru.khehelk.cityroutes.domain.dto.RouteCreateDto;
+import ru.khehelk.cityroutes.domain.dto.RouteDto;
+import ru.khehelk.cityroutes.domain.dto.RouteInfoDto;
+import ru.khehelk.cityroutes.domain.dto.RouteUpdateDto;
+import ru.khehelk.cityroutes.domain.dto.RouteUpdateStopsDto;
 
 @Tag(name = "Управление маршрутами")
 @RequestMapping("/api/v1/routes")
@@ -46,7 +43,7 @@ public interface RouteApi {
 
     @Operation(summary = "Получить список маршрутов в городе")
     @GetMapping
-    ResponseEntity<Page<RouteDto>> searchRoutesPage(@RequestParam("city_code") Integer cityCode,
+    ResponseEntity<Page<RouteDto>> searchRoutesPage(@RequestParam("city_id") Long cityId,
                                                     @RequestParam(value = "route_number", required = false) Integer number,
                                                     Pageable pageable);
 

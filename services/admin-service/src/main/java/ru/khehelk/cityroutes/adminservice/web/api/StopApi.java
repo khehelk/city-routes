@@ -13,12 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.khehelk.cityroutes.adminservice.service.dto.CityCreateDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.CityDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.CityUpdateDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopCreateDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopDto;
-import ru.khehelk.cityroutes.adminservice.service.dto.StopUpdateDto;
+import ru.khehelk.cityroutes.domain.dto.StopCreateDto;
+import ru.khehelk.cityroutes.domain.dto.StopDto;
+import ru.khehelk.cityroutes.domain.dto.StopUpdateDto;
 
 @Tag(name = "Управление остановками")
 @RequestMapping("/api/v1/stops")
@@ -39,8 +36,6 @@ public interface StopApi {
 
     @Operation(summary = "Получить список остановок в городе")
     @GetMapping
-    ResponseEntity<Page<StopDto>> searchStopsPage(@RequestParam("city_code") Integer cityCode,
-                                                   @RequestParam(value = "stop_name", required = false) String stopName,
-                                                   Pageable pageable);
+    ResponseEntity<?> searchStopsPage(@RequestParam("city_id") Long cityId);
 
 }

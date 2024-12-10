@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+    <changeSet id="202412071036_change_column_names" author="danil.markov">
+        <renameColumn tableName="city" oldColumnName="code" newColumnName="region_code" />
+        <renameColumn tableName="route" oldColumnName="city_code" newColumnName="city_id" />
+        <renameColumn tableName="stop" oldColumnName="city_code" newColumnName="city_id" />
+    </changeSet>
+</databaseChangeLog>
