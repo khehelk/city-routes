@@ -20,4 +20,5 @@ public interface CityRepository extends JpaRepository<City, Long> {
 
     List<City> findAllByRegionCode(Integer regionCode);
 
+    boolean existsByRegionCodeAndName(int i, String name);
 }

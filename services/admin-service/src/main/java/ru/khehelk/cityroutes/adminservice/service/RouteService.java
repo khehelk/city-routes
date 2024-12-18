@@ -12,19 +12,18 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.khehelk.cityroutes.adminservice.repository.RouteStopsRepository;
+import ru.khehelk.cityroutes.adminservice.service.mapper.RouteMapper;
+import ru.khehelk.cityroutes.businesslogic.repository.RouteRepository;
+import ru.khehelk.cityroutes.domain.dto.RouteCreateDto;
+import ru.khehelk.cityroutes.domain.dto.RouteDto;
+import ru.khehelk.cityroutes.domain.dto.RouteUpdateDto;
+import ru.khehelk.cityroutes.domain.dto.RouteUpdateStopsDto;
 import ru.khehelk.cityroutes.domain.mapper.RouteSimpleMapper;
 import ru.khehelk.cityroutes.domain.model.Route;
 import ru.khehelk.cityroutes.domain.model.RouteStops;
 import ru.khehelk.cityroutes.domain.model.RouteStopsId;
 import ru.khehelk.cityroutes.domain.model.Stop;
-import ru.khehelk.cityroutes.businesslogic.repository.RouteRepository;
-import ru.khehelk.cityroutes.adminservice.repository.RouteStopsRepository;
-import ru.khehelk.cityroutes.domain.dto.RouteCreateDto;
-import ru.khehelk.cityroutes.domain.dto.RouteDto;
-import ru.khehelk.cityroutes.domain.dto.RouteInfoDto;
-import ru.khehelk.cityroutes.domain.dto.RouteUpdateDto;
-import ru.khehelk.cityroutes.domain.dto.RouteUpdateStopsDto;
-import ru.khehelk.cityroutes.adminservice.service.mapper.RouteMapper;
 
 @Slf4j
 @Service
@@ -129,13 +128,6 @@ public class RouteService {
             routePage.getContent().stream().map(routeSimpleMapper::toDto).toList(),
             routePage.getPageable(),
             routePage.getTotalElements());
-    }
-
-    @Transactional(readOnly = true)
-    public RouteInfoDto findById(Long id) {
-        Route route = routeRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Маршрут с таким id не найден"));
-        return routeMapper.toInfoDto(route);
     }
 
 }

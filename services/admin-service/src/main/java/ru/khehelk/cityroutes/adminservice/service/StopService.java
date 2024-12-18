@@ -9,13 +9,13 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.khehelk.cityroutes.domain.mapper.StopSimpleMapper;
-import ru.khehelk.cityroutes.domain.model.Stop;
+import ru.khehelk.cityroutes.adminservice.service.mapper.StopMapper;
 import ru.khehelk.cityroutes.businesslogic.repository.StopRepository;
 import ru.khehelk.cityroutes.domain.dto.StopCreateDto;
 import ru.khehelk.cityroutes.domain.dto.StopDto;
 import ru.khehelk.cityroutes.domain.dto.StopUpdateDto;
-import ru.khehelk.cityroutes.adminservice.service.mapper.StopMapper;
+import ru.khehelk.cityroutes.domain.mapper.StopSimpleMapper;
+import ru.khehelk.cityroutes.domain.model.Stop;
 
 @Service
 @RequiredArgsConstructor

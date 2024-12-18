@@ -11,4 +11,13 @@ databaseChangeLog:
   - include:
       file: 202412071223_change_column_type.xml
       relativeToChangelogFile: true
+  - include:
+      file: 202412151340_add_column_in_review_table.xml
+      relativeToChangelogFile: true
+  - include:
+      file: 202412151429_add_column_in_review_table.xml
+      relativeToChangelogFile: true
+  - include:
+      file: 202412151534_add_constraint_review.xml
+      relativeToChangelogFile: true
 

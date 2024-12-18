@@ -8,12 +8,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.khehelk.cityroutes.adminservice.service.RouteService;
+import ru.khehelk.cityroutes.adminservice.web.api.RouteApi;
 import ru.khehelk.cityroutes.domain.dto.RouteCreateDto;
 import ru.khehelk.cityroutes.domain.dto.RouteDto;
-import ru.khehelk.cityroutes.domain.dto.RouteInfoDto;
 import ru.khehelk.cityroutes.domain.dto.RouteUpdateDto;
 import ru.khehelk.cityroutes.domain.dto.RouteUpdateStopsDto;
-import ru.khehelk.cityroutes.adminservice.web.api.RouteApi;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,11 +53,6 @@ public class RouteContoller implements RouteApi {
             return ResponseEntity.ok(routeService.findAllBy(cityId, number, pageable));
         }
         return ResponseEntity.ok(routeService.findAllBy(pageable));
-    }
-
-    @Override
-    public ResponseEntity<RouteInfoDto> findRouteInfo(Long id) {
-        return ResponseEntity.ok(routeService.findById(id));
     }
 
 }

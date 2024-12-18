@@ -1,3 +1,22 @@
+server:
+  port: 8082
 spring:
   application:
     name: auth-service
+  jpa:
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${POSTGRES_JDBC_URL}
+    username: ${POSTGRES_JDBC_USERNAME}
+    password: ${POSTGRES_JDBC_PASSWORD}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/oauth/token
+jwt:
+  secretBase64: cXdlcXdlcXdlcXdlc2Rhc2VmdyB0MjM0ciBxMjRyZGZnZnNlcmc=
+  expirationInMs: 86400000
+

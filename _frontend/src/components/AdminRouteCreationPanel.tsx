@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import Input from "../ui/Input.tsx";
-import {addRouteReq, fetchStopsByCityId, fetchCitiesByRegionCode} from "../api/AdminApi.ts";
+import {addRouteReq, fetchCitiesByRegionCode, fetchStopsByCityId} from "../api/AdminApi.ts";
 import {CityDto, StopDto} from "../api/dto.ts";
 
 interface AdminCityCreationPanelProps {

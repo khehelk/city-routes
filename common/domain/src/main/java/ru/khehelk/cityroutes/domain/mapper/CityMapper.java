@@ -1,9 +1,9 @@
 package ru.khehelk.cityroutes.domain.mapper;
 
 import org.springframework.stereotype.Service;
-import ru.khehelk.cityroutes.domain.model.City;
 import ru.khehelk.cityroutes.domain.dto.CityCreateDto;
 import ru.khehelk.cityroutes.domain.dto.CityDto;
+import ru.khehelk.cityroutes.domain.model.City;
 
 @Service
 public class CityMapper {

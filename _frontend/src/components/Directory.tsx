@@ -1,9 +1,15 @@
-import React, {useEffect, useState} from 'react'
-import {CityDto, RouteDto, RoutesPageDto, RouteUpdateDto, StopDto} from "../api/dto.ts";
+import React, {useState} from 'react'
+import {CityDto, RouteDto, RouteUpdateDto, StopDto} from "../api/dto.ts";
 import Input from "../ui/Input.tsx";
-import {fetchCitiesByRegionCode, fetchRoutesByCityId} from "../api/DirectoryApi.ts";
-import {Component} from "../enums/Component.tsx";
+import {
+    addInFavouriteReq,
+    fetchCitiesByRegionCode,
+    fetchRoutesByCityId,
+    removeFromFavouriteReq
+} from "../api/DirectoryApi.ts";
 import {deleteRouteReq, fetchStopsByCityId, updateRouteReq} from "../api/AdminApi.ts";
+import {getUserRoles, isAdmin} from "../utils/DecodedToken.ts";
+import {fetchComments, sendCommentReq} from "../api/ReviewApi.ts";
 
 const Directory = () => {
     const [cities, setCities] = useState<CityDto[]>([])
@@ -20,6 +26,9 @@ const Directory = () => {
     const [updateRouteSelectedStops, setUpdateRouteSelectedStops] = useState<StopDto[]>([])
     const [updateRouteAllStops, setUpdateRouteAllStops] = useState<StopDto[]>([])
     const [isUpdating, setIsUpdating] = useState<boolean>(false)
+    const [comments, setComments] = useState<{author: string, comment: string, date: Date}[][]>([])
+    const [newComment, setNewComment] = useState<{ comment: string }[]>(new Array(20).fill({ comment: '' }))
+    const [commentOffsets, setCommentOffsets] = useState<bigint[]>(Array.from({ length: 20 }, () => BigInt(0)))
 
     const showNotification = (message: string) => {
         setNotification(message);
@@ -155,6 +164,95 @@ const Directory = () => {
             .catch(err => showErrorNotification(err.response.data.message));
     }
 
+    const addInFavourite = (id: bigint) => {
+        addInFavouriteReq(id)
+            .then(res => {
+                showNotification(res);
+                console.log(res);
+                getRoutesInCity(currentPage);
+            })
+            .catch(err => showErrorNotification(err.response.data.message));
+    }
+
+    const removeFromFavourite = (id: bigint) => {
+        removeFromFavouriteReq(id)
+            .then(res => {
+                showNotification(res);
+                console.log(res);
+                getRoutesInCity(currentPage);
+            })
+            .catch(err => showErrorNotification(err.response.data.message));
+    }
+
+    function sendComment(index: number) {
+        if (!newComment[index]) {
+            showNotification("Поле комментария пустое");
+            return;
+        }
+
+        sendCommentReq(newComment[index].comment, routes[index].id)
+            .then(res => {
+                showNotification(res);
+                console.log(res);
+                getComments(index);
+            })
+            .catch(err => showErrorNotification(err.response.data.message));
+    }
+
+    function getComments(index: number) {
+        setCommentOffsets((commentOffsets) => {
+            const prev = [...commentOffsets]
+            prev[index] = BigInt(5)
+            fetchComments(routes[index].id, commentOffsets[index])
+                .then(res => {
+                    setComments((comments) => {
+                        const prev = [...comments]
+                        prev[index] = res
+                        return prev;
+                    });
+                })
+                .catch(err => showErrorNotification(err.response.data.message));
+            return prev;
+        })
+    }
+
+    function getCommentsWithOffset(index: number) {
+        setCommentOffsets((commentOffsets) => {
+            const prev1 = [...commentOffsets]
+            prev1[index] = prev1[index] + BigInt(5)
+            fetchComments(routes[index].id, prev1[index])
+                .then(res => {
+                    setComments((comments) => {
+                        const prev = [...comments]
+                        prev[index] = res
+                        setCommentOffsets((commentOffsets) => {
+                            const prev = [...commentOffsets]
+                            prev[index] = prev1[index] - BigInt(5) + BigInt(res.length)
+                            return prev;
+                        })
+                        return prev;
+                    });
+                })
+                .catch(err => {
+                    showErrorNotification(err.response.data.message)
+                    setCommentOffsets((commentOffsets) => {
+                        const prev = [...commentOffsets]
+                        prev[index] = prev[index] - BigInt(5)
+                        return prev;
+                    })
+                });
+            return prev1;
+        })
+    }
+
+    function handleNewComment(value: string, index: number) {
+        setNewComment(prevState => {
+            const updatedComments = [...prevState]; // Copy the current state
+            updatedComments[index] = { comment: value }; // Update the specific comment
+            return updatedComments; // Return the new state
+        });
+    }
+
     return (
         <div className="min-w-full flex flex-col h-full">
             {notification && (
@@ -189,8 +287,8 @@ const Directory = () => {
             </div>
             <div className="routes-list flex-1">
                 <div className="flex flex-col overflow-y-auto routes-list mx-2 border-b rounded-b-2xl">
-                {routes.map((route) => (
-                    <div className="p-2" key={Math.random()}>
+                {routes.map((route, index) => (
+                    <div className="my-2 p-2 border rounded-lg" key={Math.random()}>
                         <div className="flex flex-row items-center justify-between">
                             <div className="">
                                 <div className="">
@@ -203,24 +301,28 @@ const Directory = () => {
                             <div className="">
                                 <div className="">
                                     <button className="p-1">
-                                        <img className="w-8 h-8" src="/img/rate_review.svg"/>
+                                        {route.isFavourite ?
+                                            (
+                                                <img onClick={() => removeFromFavourite(route.id)} className={`w-8 h-8 red-svg`} src="/img/favorite.svg"/>
+                                            ) : (
+                                                <img onClick={() => addInFavourite(route.id)} className={`w-8 h-8`} src="/img/favorite_border.svg"/>
+                                            )
+                                        }
                                     </button>
-                                    <button className="p-1">
-                                        <img className="w-8 h-8" src="/img/reviews.svg"/>
-                                    </button>
-                                    <button className="p-1">
-                                        <img className="w-8 h-8" src="/img/favorite_border.svg"/>
-                                    </button>
-                                    <button
-                                        onClick={() => openUpdateModal(route)}
-                                        className="bg-green-900 text-white rounded-2xl p-3 m-2">
-                                        Обновить
-                                    </button>
-                                    <button
-                                        onClick={() => deleteRoute(route)}
-                                        className="bg-red-900 text-white rounded-2xl p-3 m-2">
-                                        Удалить
-                                    </button>
+                                    {isAdmin() &&
+                                        <>
+                                            <button
+                                                onClick={() => openUpdateModal(route)}
+                                                className="bg-green-900 text-white rounded-2xl p-3 m-2">
+                                                Обновить
+                                            </button>
+                                            <button
+                                                onClick={() => deleteRoute(route)}
+                                                className="bg-red-900 text-white rounded-2xl p-3 m-2">
+                                                Удалить
+                                            </button>
+                                        </>
+                                    }
                                 </div>
                             </div>
                         </div>
@@ -235,13 +337,40 @@ const Directory = () => {
                                 ))
                             }
                         </div>
+                        <div className="flex flex-col overflow-x-auto">
+                            <div className="flex flex-col overflow-y-auto max-h-32">
+                                {comments[index]?.map((comment, index) => (
+                                    <div key={index} className="flex border p-2 rounded-lg flex-col ">
+                                        <div className="flex flex-row">
+                                            <h3 className="mr-2">{comment.date.toString().replace(/\.\d+Z$/, '').replace('T', ' ')}</h3>
+                                            <h3 className="mr-2">{comment.author}</h3>
+                                            <p>{comment.comment}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                            <button onClick={() => getCommentsWithOffset(index)}
+                                    className="px-4 py-3 my-2 bg-greyGreen-50 text-white font-semibold hover:bg-greyGreen-200 transition-all rounded-lg">
+                                Больше комментариев
+                            </button>
+                            {getUserRoles().length != 0 && <div className="flex flex-row">
+                                <Input  type={"text"} className={"flex-1 rounded-l-lg"} value={newComment[index]?.comment || ''}
+                                        onChange={(value) => handleNewComment(value as string, index)}
+                                        placeholder={"Комментарий..."}/>
+                                <button onClick={() => sendComment(index)}
+                                        className="px-4 py-3 bg-greyGreen-50 text-white font-semibold hover:bg-greyGreen-200 transition-all rounded-r-lg">
+                                    Отправить
+                                </button>
+                            </div>}
+                        </div>
                     </div>
                 ))}
                 </div>
             </div>
             <div className="flex my-2 align-center justify-center w-full">
                 {currentPage > 0 && (
-                    <button className="px-4 py-3 bg-greyGreen-50 text-white font-semibold hover:bg-greyGreen-200 transition-all rounded-lg"
+                    <button
+                        className="px-4 py-3 bg-greyGreen-50 text-white font-semibold hover:bg-greyGreen-200 transition-all rounded-lg"
                         onClick={minusPage}>
                         Назад
                     </button>

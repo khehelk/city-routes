@@ -42,18 +42,4 @@ public class StopService {
             stopPage.getTotalElements());
     }
 
-    @Transactional(readOnly = true)
-    public List<Stop> findAllByIds(List<Long> stopIds) {
-        return stopRepository.findAllById(stopIds);
-    }
-
-    @Transactional(readOnly = true)
-    public Stop findById(Long value) {
-        return stopRepository.findById(value)
-            .orElseThrow(() -> new EntityNotFoundException("Остановка с таким id не найдена"));
-    }
-
-    public List<Stop> findAll() {
-        return stopRepository.findAll();
-    }
 }

@@ -7,4 +7,4 @@ include('services:admin-service',
         'services:review-service',
         'common:domain',
         'common:business-logic',
-        'common:web-config')
+        'common:web')

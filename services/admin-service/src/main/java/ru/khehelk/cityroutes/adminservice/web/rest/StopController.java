@@ -3,15 +3,12 @@ package ru.khehelk.cityroutes.adminservice.web.rest;
 import java.net.URI;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.khehelk.cityroutes.adminservice.service.StopService;
-import ru.khehelk.cityroutes.domain.dto.StopCreateDto;
-import ru.khehelk.cityroutes.domain.dto.StopDto;
-import ru.khehelk.cityroutes.domain.dto.StopUpdateDto;
 import ru.khehelk.cityroutes.adminservice.web.api.StopApi;
+import ru.khehelk.cityroutes.domain.dto.StopCreateDto;
+import ru.khehelk.cityroutes.domain.dto.StopUpdateDto;
 
 @RestController
 @RequiredArgsConstructor

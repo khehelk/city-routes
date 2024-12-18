@@ -3,5 +3,6 @@ export enum Component {
     Directory,
     Favourites,
     Login,
-    AdminPanel
+    AdminPanel,
+    Registration
 }

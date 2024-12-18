@@ -5,6 +5,8 @@ import Directory from "./components/Directory.tsx";
 import Favourites from "./components/Favourites.tsx";
 import Login from "./components/Login.tsx";
 import AdminPanel from "./components/AdminPanel.tsx";
+import Registration from "./components/Registration.tsx";
+import {isAdmin} from "./utils/DecodedToken.ts";
 
 const App = () => {
 
@@ -24,6 +26,8 @@ const App = () => {
                 return <Login />;
             case Component.AdminPanel:
                 return <AdminPanel />;
+            case Component.Registration:
+                return <Registration />;
             default:
                 return <></>;
         }
@@ -40,13 +44,13 @@ const App = () => {
                             className="bg-red-900 text-white rounded-2xl p-3 m-2">
                             Закрыть
                         </button>
-                        {selectedComponent != Component.AdminPanel ? (
+                        {isAdmin() && selectedComponent != Component.AdminPanel ? (
                             <button
                                 onClick={() => setSelectedComponent(Component.AdminPanel)}
                                 className="bg-green-900 text-white rounded-2xl p-3 m-2">
                                 Панель администратора
                             </button>
-                        ) : (
+                        ) : isAdmin() && (
                             <button
                                 onClick={() => setSelectedComponent(Component.Directory)}
                                 className="bg-green-900 text-white rounded-2xl p-3 m-2">

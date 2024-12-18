@@ -8,11 +8,15 @@ springBoot {
 
 dependencies {
     implementation project(':common:business-logic')
-    implementation project(':common:web-config')
+    implementation project(':common:web')
     implementation 'net.logstash.logback:logstash-logback-encoder:7.3'
     implementation "org.mapstruct:mapstruct:${mapstruct_version}"
     implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdoc_version}"
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation "io.jsonwebtoken:jjwt:${jjwt_version}"
+    testImplementation 'org.springframework.security:spring-security-test'
     annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.testcontainers:postgresql:1.19.0'
 }

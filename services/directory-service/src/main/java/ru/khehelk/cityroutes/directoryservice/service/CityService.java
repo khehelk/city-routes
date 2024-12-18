@@ -2,7 +2,6 @@ package ru.khehelk.cityroutes.directoryservice.service;
 
 import java.util.List;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

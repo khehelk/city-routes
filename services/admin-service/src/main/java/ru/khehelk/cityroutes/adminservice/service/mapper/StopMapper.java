@@ -2,9 +2,9 @@ package ru.khehelk.cityroutes.adminservice.service.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.khehelk.cityroutes.domain.model.Stop;
 import ru.khehelk.cityroutes.adminservice.service.CityService;
 import ru.khehelk.cityroutes.domain.dto.StopCreateDto;
+import ru.khehelk.cityroutes.domain.model.Stop;
 
 @Service
 @RequiredArgsConstructor

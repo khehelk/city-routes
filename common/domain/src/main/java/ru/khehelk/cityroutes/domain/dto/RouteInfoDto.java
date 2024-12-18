@@ -7,6 +7,7 @@ public record RouteInfoDto(
     int number,
     int frequencyRangeStart,
     int frequencyRangeEnd,
+    boolean isFavourite,
     Map<Integer, StopDto> stops
 ) {
 }

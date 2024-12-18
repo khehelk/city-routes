@@ -34,6 +34,7 @@ export interface RouteDto {
     frequencyRangeStart: number;
     frequencyRangeEnd: number;
     stops: Map<number, StopDto>;
+    isFavourite: boolean;
 }
 
 export interface RoutesPageDto {
@@ -47,4 +48,14 @@ export interface RouteUpdateDto {
     frequencyRangeStart: number;
     frequencyRangeEnd: number;
     stops: Map<number, bigint>
+}
+
+export interface RegistrationDto {
+    email: string;
+    password: string;
+}
+
+export interface LoginDto {
+    email: string;
+    password: string;
 }

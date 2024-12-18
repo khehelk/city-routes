@@ -9,12 +9,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.khehelk.cityroutes.domain.model.City;
 import ru.khehelk.cityroutes.adminservice.repository.CityRepository;
 import ru.khehelk.cityroutes.domain.dto.CityCreateDto;
 import ru.khehelk.cityroutes.domain.dto.CityDto;
 import ru.khehelk.cityroutes.domain.dto.CityUpdateDto;
 import ru.khehelk.cityroutes.domain.mapper.CityMapper;
+import ru.khehelk.cityroutes.domain.model.City;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +26,7 @@ public class CityService {
 
     @Transactional
     public void createAndSaveCity(CityCreateDto city) {
-        if (cityRepository.existsByRegionCode(city.regionCode())) {
+        if (cityRepository.existsByRegionCodeAndName(city.regionCode(), city.name())) {
             throw new IllegalArgumentException("Такой город уже существует");
         }
         cityRepository.save(cityMapper.toEntity(city));

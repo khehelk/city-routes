@@ -2,8 +2,8 @@ package ru.khehelk.cityroutes.domain.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.khehelk.cityroutes.domain.model.Route;
 import ru.khehelk.cityroutes.domain.dto.RouteDto;
+import ru.khehelk.cityroutes.domain.model.Route;
 
 @Service
 @RequiredArgsConstructor

@@ -9,10 +9,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.khehelk.cityroutes.adminservice.service.CityService;
+import ru.khehelk.cityroutes.adminservice.web.api.CityApi;
 import ru.khehelk.cityroutes.domain.dto.CityCreateDto;
 import ru.khehelk.cityroutes.domain.dto.CityDto;
 import ru.khehelk.cityroutes.domain.dto.CityUpdateDto;
-import ru.khehelk.cityroutes.adminservice.web.api.CityApi;
 
 @RestController
 @RequiredArgsConstructor

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.khehelk.cityroutes.domain.dto.RouteCreateDto;
 import ru.khehelk.cityroutes.domain.dto.RouteDto;
-import ru.khehelk.cityroutes.domain.dto.RouteInfoDto;
 import ru.khehelk.cityroutes.domain.dto.RouteUpdateDto;
 import ru.khehelk.cityroutes.domain.dto.RouteUpdateStopsDto;
 
@@ -46,9 +45,5 @@ public interface RouteApi {
     ResponseEntity<Page<RouteDto>> searchRoutesPage(@RequestParam("city_id") Long cityId,
                                                     @RequestParam(value = "route_number", required = false) Integer number,
                                                     Pageable pageable);
-
-    @Operation(summary = "Получить всю информацию о маршруте")
-    @GetMapping("/{id}")
-    ResponseEntity<RouteInfoDto> findRouteInfo(@PathVariable("id") Long id);
 
 }

@@ -1,6 +1,6 @@
 package ru.khehelk.cityroutes.directoryservice.web.rest;
 
-import java.net.URI;
+import java.util.List;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -8,12 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import ru.khehelk.cityroutes.directoryservice.service.RouteService;
-import ru.khehelk.cityroutes.domain.dto.RouteCreateDto;
-import ru.khehelk.cityroutes.domain.dto.RouteDto;
-import ru.khehelk.cityroutes.domain.dto.RouteInfoDto;
-import ru.khehelk.cityroutes.domain.dto.RouteUpdateDto;
-import ru.khehelk.cityroutes.domain.dto.RouteUpdateStopsDto;
 import ru.khehelk.cityroutes.directoryservice.web.api.RouteApi;
+import ru.khehelk.cityroutes.domain.dto.RouteInfoDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,6 +29,23 @@ public class RouteContoller implements RouteApi {
     @Override
     public ResponseEntity<RouteInfoDto> findRouteInfo(Long id) {
         return ResponseEntity.ok(routeService.findById(id));
+    }
+
+    @Override
+    public ResponseEntity<String> addInFavourite(Long id) {
+        routeService.addInFavourite(id);
+        return ResponseEntity.ok("Успешно добавлено в избранные");
+    }
+
+    @Override
+    public ResponseEntity<String> removeFromFavourite(Long id) {
+        routeService.removeFromFavourite(id);
+        return ResponseEntity.ok("Успешно удалено из избранных");
+    }
+
+    @Override
+    public ResponseEntity<List<RouteInfoDto>> getFavourites() {
+        return ResponseEntity.ok(routeService.getFavourites());
     }
 
 }
